@@ -1,0 +1,47 @@
+{
+  "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+  "CreationDate": "2026-08-22",
+  "Sources": [
+    {
+      "SourceDetails": {
+        "Argument": "https://cdn.winget.microsoft.com/cache",
+        "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+        "Name": "winget",
+        "Type": "Microsoft.PreIndexed.Package"
+      },
+      "Packages": [
+        { "PackageIdentifier": "Git.Git" },
+        { "PackageIdentifier": "CoreyButler.NVMforWindows" },
+        { "PackageIdentifier": "Insecure.Nmap" },
+        { "PackageIdentifier": "sharkdp.bat" },
+        { "PackageIdentifier": "yt-dlp.yt-dlp" },
+        { "PackageIdentifier": "Ollama.Ollama" },
+        { "PackageIdentifier": "Yarn.Yarn" },
+        { "PackageIdentifier": "7zip.7zip" },
+
+        { "PackageIdentifier": "AgileBits.1Password" },
+        { "PackageIdentifier": "Microsoft.PowerToys" },
+        { "PackageIdentifier": "Google.Chrome" },
+        { "PackageIdentifier": "VivaldiTechnologies.Vivaldi" },
+        { "PackageIdentifier": "TorProject.TorBrowser" },
+        { "PackageIdentifier": "Discord.Discord" },
+        { "PackageIdentifier": "Zoom.Zoom" },
+        { "PackageIdentifier": "GitHub.GitHubDesktop" },
+        { "PackageIdentifier": "Docker.DockerDesktop" },
+        { "PackageIdentifier": "Microsoft.VisualStudioCode" },
+        { "PackageIdentifier": "Notion.Notion" },
+        { "PackageIdentifier": "Spotify.Spotify" },
+        { "PackageIdentifier": "VideoLAN.VLC" },
+        { "PackageIdentifier": "HandBrake.HandBrake" },
+        { "PackageIdentifier": "RealVNC.VNCViewer" },
+        { "PackageIdentifier": "Anthropic.Claude" },
+        { "PackageIdentifier": "thomasnordquist.MQTT-Explorer" },
+        { "PackageIdentifier": "RaspberryPiFoundation.RaspberryPiImager" },
+        { "PackageIdentifier": "tailscale.tailscale" },
+        { "PackageIdentifier": "EpicGames.EpicGamesLauncher" },
+        { "PackageIdentifier": "Valve.Steam" },
+        { "PackageIdentifier": "Microsoft.OneDrive" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+    "name": "Tomorrow Night Eighties",
+    "background": "#2D2D2D",
+    "foreground": "#CCCCCC",
+    "cursorColor": "#CCCCCC",
+    "selectionBackground": "#515151",
+    "black": "#000000",
+    "red": "#F2777A",
+    "green": "#99CC99",
+    "yellow": "#FFCC66",
+    "blue": "#6699CC",
+    "purple": "#CC99CC",
+    "cyan": "#66CCCC",
+    "white": "#FFFFFF",
+    "brightBlack": "#000000",
+    "brightRed": "#F2777A",
+    "brightGreen": "#99CC99",
+    "brightYellow": "#FFCC66",
+    "brightBlue": "#6699CC",
+    "brightPurple": "#CC99CC",
+    "brightCyan": "#66CCCC",
+    "brightWhite": "#FFFFFF"
+}
