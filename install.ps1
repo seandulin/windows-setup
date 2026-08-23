@@ -54,4 +54,4 @@ Write-Step "Installing fonts"
 
 Write-Step "Done"
 Write-Host "Open a new Windows Terminal tab to see the theme + fonts."
-Write-Host "If oh-my-posh/fnm commands in your prompt aren't found yet, close and reopen the terminal once more — PATH changes from winget installs need a fresh shell."
+Write-Host "If oh-my-posh/fnm commands in your prompt aren't found yet, close and reopen the terminal once more - PATH changes from winget installs need a fresh shell."

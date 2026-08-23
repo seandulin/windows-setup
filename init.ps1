@@ -43,19 +43,59 @@ $my_email = "sean.dulin@gmail.com"
 git config --global user.name  $my_name
 git config --global user.email $my_email
 
-# ---- Windows Terminal ----------------------------------------------------
-# Win11 ships this by default; Win10 needs it installed explicitly.
-if (-not (Get-AppxPackage -Name Microsoft.WindowsTerminal -ErrorAction SilentlyContinue)) {
-    winget install --id Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements
+# ---- WSL (Ubuntu) -----------------------------------------------------
+# Requires an elevated (Run as Administrator) window the first time.
+# If this machine has never had WSL installed before, Windows needs a reboot
+# before Ubuntu is actually usable — just re-run this script after rebooting
+# and it'll confirm Ubuntu is present rather than trying to reinstall it.
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not (Get-Command wsl -ErrorAction SilentlyContinue)) {
+    Write-Warning "wsl.exe not found — this Windows build may be too old for in-box WSL. Skipping."
+} elseif (-not $isAdmin) {
+    Write-Warning "Skipping WSL — re-run this script from an elevated ('Run as Administrator') PowerShell to install/check WSL + Ubuntu."
+} else {
+    # wsl.exe outputs UTF-16 with null bytes interleaved when captured like this —
+    # strip them or the -match below silently fails to find "Ubuntu" even when present.
+    $distros = (wsl --list --quiet 2>$null) -replace "`0", ""
+    if ($distros -match "Ubuntu") {
+        Write-Host "WSL Ubuntu already installed."
+    } else {
+        Write-Host "Installing WSL with Ubuntu (first-time install needs a reboot before it's usable)..."
+        wsl --install -d Ubuntu
+    }
 }
 
+# ---- Windows Terminal ----------------------------------------------------
+# Win11 ships this by default; Win10 needs it installed explicitly.
+# Note: NOT using Get-AppxPackage here — that cmdlet needs the Appx module,
+# which is Windows PowerShell (Desktop) only and fails to load under PS7/Core.
+# winget install is idempotent on its own, so just call it directly.
+winget install --id Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements
+
 # ---- PowerShell profile ----------------------------------------------------
-# Equivalent of `cp ./.zshrc ~/.zshrc`. $PROFILE differs between PS5 and PS7 —
-# this only sets up the PS7 (pwsh) profile. See profile.ps1 in this same folder.
-$profileDir = Split-Path $PROFILE
-if (-not (Test-Path $profileDir)) { New-Item -ItemType Directory -Path $profileDir | Out-Null }
-Copy-Item -Path ".\profile.ps1" -Destination $PROFILE -Force
-Write-Host "Copied profile.ps1 to $PROFILE"
-Write-Host "Not sourcing it — you likely haven't installed oh-my-posh/fnm yet. Run packages install first."
+# Equivalent of `cp ./.zshrc ~/.zshrc`. PS5 and PS7 have SEPARATE profile files
+# and you use both, so this installs the same profile.ps1 to each rather than
+# relying on whichever $PROFILE the current shell resolves to.
+$profileTargets = @()
+
+$pwshProfile = & pwsh -NoProfile -Command '$PROFILE' 2>$null
+if ($pwshProfile) { $profileTargets += $pwshProfile }
+
+$ps5Profile = & powershell.exe -NoProfile -Command '$PROFILE' 2>$null
+if ($ps5Profile) { $profileTargets += $ps5Profile }
+
+foreach ($target in $profileTargets) {
+    $dir = Split-Path $target
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    Copy-Item -Path ".\profile.ps1" -Destination $target -Force
+    Write-Host "Copied profile.ps1 to $target"
+}
+
+# Give PS5 a modern PSReadLine too (its bundled 2.0.0 lacks prediction features
+# entirely) so both shells actually get the same behavior, not just no errors.
+Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck -AllowClobber -MinimumVersion 2.2.0
+
+Write-Host "Not sourcing the profile - you likely haven't installed oh-my-posh/fnm yet. Run .\install.ps1 next."
 
 Write-Host "`nDone. Open a new terminal, then run: winget import -i packages.json --accept-package-agreements --accept-source-agreements"

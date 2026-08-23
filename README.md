@@ -7,12 +7,14 @@ Mirrors your Mac `init.sh` + `install.sh` + Brewfile flow. Windows 10, PowerShel
 Same two-step shape as your Mac flow (`init.sh` then `install.sh`):
 
 ```powershell
-# 1. One-time bootstrap: registry prefs, dirs, ssh, git config, Windows Terminal, PS profile
+# 1. One-time bootstrap: registry prefs, dirs, ssh, git config, WSL/Ubuntu, Windows Terminal, PS profile
 .\init.ps1
 
 # 2. Everything else — packages, fonts, terminal theme, in one shot
 .\install.ps1
 ```
+
+`init.ps1` now includes installing WSL with Ubuntu. That step needs an elevated ("Run as Administrator") window — if you run `init.ps1` from a normal window, it'll skip WSL with a warning rather than fail, so you can rerun it elevated whenever's convenient. If WSL has never been installed on this machine before, Windows will need a reboot before Ubuntu is actually usable — just rerun `init.ps1` after rebooting and it'll detect Ubuntu is already there instead of reinstalling.
 
 `install.ps1` is the orchestrator (your `install.sh` equivalent) — it runs `winget import` against `packages.json`, launches Windows Terminal once so its `settings.json` exists to edit, applies the color scheme, then installs the fonts. You don't need to call `apply-terminal-theme.ps1` or `install-fonts.ps1` yourself; `install.ps1` calls both.
 

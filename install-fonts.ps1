@@ -29,8 +29,11 @@ function Install-FontZip {
     Write-Host "Installed $Name."
 }
 
-# Fira Code + Fira Mono (official releases)
-Install-FontZip -Url "https://github.com/tonsky/FiraCode/releases/latest/download/Fira_Code_v6.2.zip" -Name "FiraCode"
+# Fira Code — using the Nerd Fonts patched release, NOT tonsky's original repo.
+# The plain FiraCode.zip release has ligatures but no icon/powerline glyphs,
+# which is what causes oh-my-posh to show a broken box character instead of
+# its segment icons. The Nerd Fonts version has both.
+Install-FontZip -Url "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip" -Name "FiraCodeNerdFont"
 
 # Fira Mono Nerd Font (Nerd Fonts patched release)
 Install-FontZip -Url "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraMono.zip" -Name "FiraMonoNerdFont"
@@ -39,5 +42,5 @@ Install-FontZip -Url "https://github.com/ryanoasis/nerd-fonts/releases/latest/do
 # since Nerd Fonts patched variants supersede the old powerline-specific forks)
 Install-FontZip -Url "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Inconsolata.zip" -Name "InconsolataNerdFont"
 
-Write-Host "`nDone. Restart any open terminal apps to see the new fonts in font pickers."
-Write-Host "Note: the old 'for-powerline' Inconsolata forks are effectively superseded by the Nerd Font patched version above — it includes the powerline glyphs plus a lot more icon coverage."
+Write-Host "Done. Restart any open terminal apps to see the new fonts in font pickers."
+Write-Host "Note: the old `'for-powerline`' Inconsolata forks are effectively superseded by the Nerd Font patched version above - it includes the powerline glyphs plus a lot more icon coverage."

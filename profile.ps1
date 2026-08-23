@@ -16,8 +16,14 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
 
 # ---- Better history / completion (colored-man-pages / colorize equivalent) -
 Import-Module PSReadLine -ErrorAction SilentlyContinue
-Set-PSReadLineOption -PredictionSource History
-Set-PSReadLineOption -PredictionViewStyle ListView
+
+# PS5's bundled PSReadLine (2.0.0) doesn't have -PredictionSource / -PredictionViewStyle
+# — those need PSReadLine 2.1+. This guards so the same profile works on both PS5 and PS7.
+$psrl = Get-Module PSReadLine
+if ($psrl -and $psrl.Version -ge [version]'2.1.0') {
+    Set-PSReadLineOption -PredictionSource History
+    Set-PSReadLineOption -PredictionViewStyle InlineView
+}
 Set-PSReadLineOption -Colors @{
     Command   = 'Cyan'
     Parameter = 'Gray'
@@ -30,8 +36,15 @@ if (Get-Module -ListAvailable -Name posh-git) {
 }
 
 # ---- bat as a nicer `cat` (matches your Brewfile's bat install) -----------
+# The built-in 'cat' alias is flagged AllScope, which Set-Alias can't strip —
+# passing -Option AllScope here keeps that flag intact while overwriting the
+# target, which is what actually lets this succeed instead of erroring.
 if (Get-Command bat -ErrorAction SilentlyContinue) {
-    Set-Alias -Name cat -Value bat
+    try {
+        Set-Alias -Name cat -Value bat -Option AllScope -Force -ErrorAction Stop
+    } catch {
+        Write-Warning "Could not alias `'cat`' to bat in this shell - run `'bat`' directly instead."
+    }
 }
 
 $env:DEFAULT_USER = $env:USERNAME

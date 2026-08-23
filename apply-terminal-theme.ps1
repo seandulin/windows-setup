@@ -27,8 +27,18 @@ if ($existing) {
 
 $settings.profiles.defaults.colorScheme = $newScheme.name
 
+# Font face — this was the missing piece causing broken glyphs in the prompt.
+# "Mono" variant is the Nerd Fonts recommendation for terminals: it keeps icon
+# glyphs at a fixed cell width so the prompt doesn't drift out of alignment
+# the way the proportional-width variant can.
+if (-not $settings.profiles.defaults.font) {
+    $settings.profiles.defaults | Add-Member -MemberType NoteProperty -Name font -Value ([PSCustomObject]@{})
+}
+$settings.profiles.defaults.font | Add-Member -MemberType NoteProperty -Name face -Value "FiraCode Nerd Font Mono" -Force
+
 # Depth 32 matters: ConvertTo-Json truncates nested objects at depth 2 by default
 $settings | ConvertTo-Json -Depth 32 | Set-Content $settingsPath
 
-Write-Host "Applied '$($newScheme.name)' as the default Windows Terminal color scheme."
+Write-Host "Applied `'$($newScheme.name)`' as the default Windows Terminal color scheme."
+Write-Host "Set default font to 'FiraCode Nerd Font Mono'."
 Write-Host "Backup saved to $settingsPath.bak"
